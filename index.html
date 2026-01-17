@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.min.js"></script>
+<body>
+<script>
+  let img, slider;
+  function setup() {
+    createCanvas(windowWidth, windowHeight);
+    // Создаем кнопку загрузки
+    createFileInput(f => { if (f.type === 'image') img = loadImage(f.data); }).position(10, 10);
+    // Создаем ползунок силы
+    slider = createSlider(0, 100, 20).position(250, 10);
+  }
+
+  function draw() {
+    if (!img) { background(200); text("Загрузи фото ->", 100, 25); return; }
+    
+    // Рисуем картинку на весь экран
+    image(img, 0, 0, width, height);
+    
+    // Делаем глюк (копируем полоски со сдвигом)
+    let val = slider.value();
+    for (let i = 0; i < val / 2; i++) {
+      let y = random(height), h = random(5, 50);
+      copy(0, y, width, h, random(-val, val), y, width, h);
+    }
+  }
+
+  // Клик мышкой по картинке = Сохранить
+  function mousePressed() { if(img && mouseY > 50) save('glitch.jpg'); }
+</script>
+</body>
+</html>
